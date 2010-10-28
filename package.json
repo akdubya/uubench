@@ -1,0 +1,11 @@
+{
+  "name"          : "uubench",
+  "version"       : "0.0.1",
+  "description"   : "A tiny asynchronous JavaScript benchmarking library",
+  "author"        : "Aleksander Williams",
+  "contributors"  : [],
+  "url"           : "http://github.com/akdubya/uubench",
+  "keywords"      : ["benchmarking"],
+  "main"          : "uubench",
+  "scripts"       : { "test": "make test" }
+}
