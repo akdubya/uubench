@@ -58,7 +58,8 @@ uubench.defaults = {
   type:       "adaptive", // adaptive or fixed
   iterations: 10,         // starting iterations
   min:        100,        // minimum run time (ms) - adaptive only
-  delay:      100         // delay between tests (ms)
+  delay:      100,        // delay between tests (ms)
+  sync:		  false		  // run benches in sync
 }
 
 function Suite(opts) {
@@ -77,6 +78,8 @@ Suite.prototype.bench = function(name, fn) {
     self.emit("result", name, stats);
     self.pending--;
     self.check();
+    if (self.options.sync && self.tests.length)
+      self.runOne();
   }));
 }
 
@@ -86,15 +89,19 @@ Suite.prototype.run = function() {
   self.emit("start", self.tests);
   self.start = new Date().getTime();
   self.pending = len;
-  for (var i=0; i<len; i++) {
-    self.runOne(i);
+  if (this.options.sync) {
+    self.runOne();
+  } else {
+    for (var i=0; i<len; i++) {
+      self.runOne();
+    }
   }
 }
 
-Suite.prototype.runOne = function(idx) {
+Suite.prototype.runOne = function() {
   var self = this;
   setTimeout(function() {
-    self.tests[idx].run(self.options.iterations);
+    (self.tests.shift()).run(self.options.iterations);
   }, self.options.delay);
 }
 
