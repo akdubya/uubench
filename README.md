@@ -26,6 +26,9 @@ Set up a benchmark suite:
       },
       done: function() {
         console.log("finished");
+      },
+      section: function(name) {
+        console.log("Section: " + name);
       }
     });
 
@@ -154,6 +157,37 @@ A suite may have multiple benchmarks.  To run benchmarks one-at-a-time in the or
       ...
     });
 
+### Section markers
+
+Longer suites that have multiple benches may use the `section()` call.  A section is run in order (when sync option is true) and can be used to visually group benches and optionally modify paramters.
+
+    suite.section("foo section", function(next) {
+      suite.options.iterations = 1;
+      next();
+    });
+
+    suite.bench("foo1", function(next) {
+      ...
+      next();
+    });
+
+    suite.bench("foo2", function(next) {
+      ...
+      next();
+    });
+
+    suite.section("bar section", function(next) {
+      // change iterations going forward
+      suite.options.iterations = 10;
+      next();
+    });
+
+    suite.bench("bar", function(next) {
+      ...
+      next();
+    });
+
+A section emits a "section" event.
 
 ### Stats
 

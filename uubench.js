@@ -18,8 +18,9 @@ function Bench(id, test, options, callback) {
 
 Bench.prototype.run = function(iter) {
   var self = this, fn = self.test,
-      checkfn = self.options.type === "adaptive" ? adaptive : fixed,
-      i = iter, pend = i,
+      type = self.options.type,
+      checkfn = type === "adaptive" ? adaptive : fixed,
+      i = type === "section" ? 1 : iter, pend = i,
       min = self.options.min, start;
 
   if (self.loop) {
@@ -76,10 +77,16 @@ Suite.prototype.bench = function(name, fn) {
   var self = this;
   self.tests.push(new Bench(name, fn, this.options, function(stats) {
     self.emit("result", name, stats);
-    self.pending--;
     self.check();
-    if (self.options.sync && self.tests.length)
-      self.runOne();
+  }));
+}
+
+//non-bench step performed in order
+Suite.prototype.section = function(name, fn) {
+  var self = this;
+  self.tests.push(new Bench(name, fn, {type:"section"}, function(stats) {
+    self.emit("section", name, stats);
+    self.check();
   }));
 }
 
@@ -106,7 +113,10 @@ Suite.prototype.runOne = function() {
 }
 
 Suite.prototype.check = function() {
-  if (this.pending) return;
+  if (--this.pending) {
+    this.options.sync && this.runOne();
+    return;
+  }
   this.emit("done", new Date().getTime() - this.start);
 }
 
