@@ -74,7 +74,8 @@ uubench ships with the following defaults that apply to every test suite:
       type:       "adaptive", // adaptive or fixed
       iterations: 10,         // starting iterations
       min:        100,        // minimum run time (ms) - adaptive only
-      delay:      100         // delay between tests (ms)
+      delay:      100,        // delay between tests (ms)
+      sync:       false       // run benches in sync mode (one at a time)
     }
 
 You may override these globally or per-suite. Read on to find out what each option does.
@@ -143,6 +144,16 @@ To collect benchmark data over multiple runs, simply rerun the suite on completi
     });
 
 Beware of relying on multiple in-process runs to establish statistical relevance. Better data can be obtained by completely re-running your test scripts.
+
+### Running in sync
+
+A suite may have multiple benchmarks.  To run benchmarks one-at-a-time in the order they were added, set sync to true.
+
+    var suite = new uubench.Suite({
+      sync: true, // run benches in sync mode (one at a time)
+      ...
+    });
+
 
 ### Stats
 
