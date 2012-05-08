@@ -82,4 +82,42 @@ suite.test("fixed", function() {
   suite.run();
 });
 
+suite.test("sync option", function() {
+  var unit = this, names='',section;
+
+  var suite = new uubench.Suite({
+    type: "fixed",
+    iterations: 10,
+    sync: true,		// run in sync!
+    result: function(name, stats) {
+      names += name;
+      iter = stats.iterations;
+    },
+    done: function() {
+      try {
+        unit.equals(section, 'section 1');
+        unit.equals(names, 'step 1step 2');
+      } catch(e) {
+        unit.fail(e);
+        return;
+      }
+      unit.pass();
+    },
+    section: function(name) {
+      section = name;
+    }
+  });
+
+  suite.section('section 1', function(next){
+      next();
+  });
+  suite.bench("step 1", function(next) {
+      setTimeout(next, 50);
+  });
+  suite.bench("step 2", function(next) {
+      next();
+  });
+  suite.run();
+});
+
 suite.run();
