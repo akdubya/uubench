@@ -79,6 +79,7 @@ Suite.prototype.bench = function(name, fn) {
     self.emit("result", name, stats);
     self.check();
   }));
+  return this;
 }
 
 //non-bench step performed in order
@@ -88,6 +89,7 @@ Suite.prototype.section = function(name, fn) {
     self.emit("section", name, stats);
     self.check();
   }));
+  return this;
 }
 
 Suite.prototype.run = function() {

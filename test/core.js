@@ -110,14 +110,14 @@ suite.test("sync option", function() {
 
   suite.section('section 1', function(next){
       next();
-  });
-  suite.bench("step 1", function(next) {
+    })
+    .bench("step 1", function(next) {
       setTimeout(next, 50);
-  });
-  suite.bench("step 2", function(next) {
+    })
+    .bench("step 2", function(next) {
       next();
-  });
-  suite.run();
+    })
+    .run();
 });
 
 suite.run();

@@ -164,14 +164,12 @@ Longer suites that have multiple benches may use the `section()` call.  A sectio
     suite.section("foo section", function(next) {
       suite.options.iterations = 1;
       next();
-    });
-
-    suite.bench("foo1", function(next) {
+    })
+    .bench("foo1", function(next) {
       ...
       next();
-    });
-
-    suite.bench("foo2", function(next) {
+    })
+    .bench("foo2", function(next) {
       ...
       next();
     });
@@ -180,14 +178,34 @@ Longer suites that have multiple benches may use the `section()` call.  A sectio
       // change iterations going forward
       suite.options.iterations = 10;
       next();
-    });
-
-    suite.bench("bar", function(next) {
+    })
+    .bench("bar", function(next) {
       ...
       next();
     });
 
 A section emits a "section" event.
+
+### Chaining
+
+As of v0.0.2 bench() and section() are _chainable_.  This allows for easier grouping and enabling/disabling of groups.
+
+    suite.section('sec 1')
+      .bench()
+      .bench()
+      ...
+
+    suite.section('sec 2')
+      .bench()
+      .bench()
+      ...
+
+    suite.run();
+
+or
+
+    suite.bench().bench().run();
+
 
 ### Stats
 
