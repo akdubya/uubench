@@ -3,7 +3,7 @@
   "version"       : "0.0.2",
   "description"   : "A tiny asynchronous JavaScript benchmarking library",
   "author"        : "Aleksander Williams",
-  "contributors"  : ["Moos <mooster@42at.com>],
+  "contributors"  : ["Moos <mooster@42at.com>"],
   "url"           : "http://github.com/akdubya/uubench",
   "keywords"      : ["benchmarking"],
   "main"          : "uubench",
