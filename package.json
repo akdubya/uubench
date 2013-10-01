@@ -5,6 +5,7 @@
   "author"        : "Aleksander Williams",
   "contributors"  : [],
   "url"           : "http://github.com/akdubya/uubench",
+  "repository"    : "git://github.com/akdubya/uubench",
   "keywords"      : ["benchmarking"],
   "main"          : "uubench",
   "scripts"       : { "test": "make test" }
