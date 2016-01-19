@@ -13,7 +13,7 @@ Features:
 * small (< 200 LOC)
 * asynchronous, evented operation
 * **fixed** as well as _adaptive_ test cycles used in [benchmark](https://github.com/bestiejs/benchmark.js) 
-* easy to use/understand 
+* easy to use
 
 **Note**: mini-bench is an up-to-date fork of [uubench](https://github.com/akdubya/uubench).
 
@@ -21,7 +21,7 @@ Features:
 Synopsis
 --------
 
-Set up a benchmark suite:
+Set up a suite:
 
 ```js
     var Bench = require('mini-bench');
