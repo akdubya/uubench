@@ -1,11 +1,13 @@
 {
-  "name"          : "uubench",
-  "version"       : "0.0.2",
+  "name"          : "mini-bench",
+  "version"       : "1.0.0",
   "description"   : "A tiny asynchronous JavaScript benchmarking library",
   "author"        : "Aleksander Williams",
   "contributors"  : ["Moos <mooster@42at.com>"],
-  "url"           : "http://github.com/akdubya/uubench",
+  "repository"    : "https://github.com/moos/mini-bench",
   "keywords"      : ["benchmarking"],
-  "main"          : "uubench",
-  "scripts"       : { "test": "make test" }
+  "main"          : "mini-bench",
+  "scripts"       : {
+    "test": "node test/core.js"
+  }
 }
