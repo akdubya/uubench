@@ -1,5 +1,5 @@
 var uutest    = require('./uutest'),
-    uubench   = require('../uubench');
+    Bench   = require('../mini-bench');
 
 function dumpError(err) {
   var out = err.testName + " -> ";
@@ -10,24 +10,22 @@ function dumpError(err) {
   return out + err.stack;
 }
 
-uubench.defaults = {
-  type:       "adaptive",
-  iterations: 1,
-  min:        1,
-  delay:      0
-}
-
 var suite = new uutest.Suite({
-  pass: function() {
-    process.stdout.write(".");
+  type      : "adaptive",
+  iterations: 1,
+  minTime   : 1,
+  delay     : 0,
+  timeout   : 1500,
+
+  pass: function (type) {
+    console.log('%s: passed', type);
   },
-  fail: function(err) {
-    process.stdout.write("F");
+  fail: function (err) {
+    console.log('%s: failed', err.testName);
   },
-  done: function(passed, failed, elapsed) {
-    process.stdout.write("\n");
+  done: function (passed, failed, elapsed) {
     console.log(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
-    this.errors.forEach(function(err) {
+    this.errors.forEach(function (err) {
       console.log(dumpError(err));
     });
   }
@@ -36,7 +34,7 @@ var suite = new uutest.Suite({
 suite.test("basic", function() {
   var unit = this;
 
-  var suite = new uubench.Suite({
+  var suite = new Bench.Suite({
     done: function() {
       unit.pass();
     }
@@ -45,7 +43,7 @@ suite.test("basic", function() {
   suite.bench("async", function(next) {
     setTimeout(function() {
       next();
-    }, 2);
+    }, 20);
   });
 
   suite.bench("sync", function(next) {
@@ -55,15 +53,19 @@ suite.test("basic", function() {
   suite.run();
 });
 
-suite.test("fixed", function() {
-  var unit = this, iter;
 
-  var suite = new uubench.Suite({
+suite.test("fixed", function() {
+  var unit = this,
+    iter;
+
+  var suite = new Bench.Suite({
     type: "fixed",
     iterations: 100,
+
     result: function(name, stats) {
       iter = stats.iterations;
     },
+
     done: function() {
       try {
         unit.equals(iter, 100);
@@ -80,6 +82,50 @@ suite.test("fixed", function() {
   });
 
   suite.run();
+});
+
+
+suite.test("async option", function() {
+  var unit = this,
+    names = '',
+    section;
+
+  var suite = new Bench.Suite({
+    type: "fixed",
+    iterations: 10,
+    async: false,		// run in sync!
+
+    result: function(name, stats) {
+      names += name;
+      iter = stats.iterations;
+    },
+
+    done: function() {
+      try {
+        unit.equals(section, 'section 1');
+        unit.equals(names, 'step 1step 2');
+      } catch(e) {
+        unit.fail(e);
+        return;
+      }
+      unit.pass();
+    },
+
+    section: function(name) {
+      section = name;
+    }
+  });
+
+  suite.section('section 1', function(next){
+      next();
+    })
+    .bench("step 1", function(next) {
+      setTimeout(next, 50);
+    })
+    .bench("step 2", function(next) {
+      next();
+    })
+    .run();
 });
 
 suite.run();
